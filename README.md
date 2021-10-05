@@ -11,4 +11,4 @@ But here's how:
 
 You need an extension to do this, [so here's one for Chrome](https://chrome.google.com/webstore/detail/new-tab-override/fjcmlondipcnnpmbcollgifldmajfonf) (sorry Firefox users, maybe later)
 
-Basically open the options for that extension and paste https://lizainslie.github.io/startpage in the url :)
+Basically open the options for that extension and paste https://lizainslie.dev/startpage/ in the url :)

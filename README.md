@@ -2,7 +2,7 @@
 
 > My Chrome new tab page
 
-*(Screenshot coming soon™)*
+![](screen1.png)
 
 ## Usage
 I don't know why you would want to use this without modifying it, as it literally plasters my name in rainbow color above a search bar (unless your name is Lizzy, in which case hey sister!)

@@ -4,7 +4,7 @@
 
 html {
     background-color: vars.$mocha_base;
-    font-family: "Iosevka", sans-serif;
+    font-family: vars.$body_font;
     height: 100vh;
     margin: 0;
     color: vars.$mocha_text;

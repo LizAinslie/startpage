@@ -8,7 +8,7 @@
 }
 
 h1.title {
-    font-family: "Bellota", cursive;
+    font-family: vars.$display_font;
     font-size: 4rem;
     grid-column: 1 / -1;
     text-align: center;

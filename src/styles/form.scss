@@ -16,7 +16,7 @@
 
     & label {
         font-weight: bold;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
 }
 
@@ -36,6 +36,10 @@ input {
     border-radius: vars.$corner;
     padding: 0.5rem 1rem;
     color: vars.$mocha_text;
+
+    &::placeholder {
+        font-family: vars.$body_font;
+    }
 
     transition:
         outline 0.25s,

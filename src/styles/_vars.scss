@@ -1,0 +1,75 @@
+$mocha_colors: (
+    "rosewater": #f5e0dc,
+    "flamingo": #f2cdcd,
+    "pink": #f5c2e7,
+    "mauve": #cba6f7,
+    "red": #f38ba8,
+    "maroon": #eba0ac,
+    "peach": #fab387,
+    "yellow": #f9e2af,
+    "green": #a6e3a1,
+    "teal": #94e2d5,
+    "sky": #89dceb,
+    "sapphire": #74c7ec,
+    "blue": #89b4fa,
+    "lavender": #b4befe,
+);
+
+$mocha_text: #cdd6f4;
+$mocha_subtext1: #bac2de;
+$mocha_subtext0: #a6adc8;
+$mocha_overlay2: #9399b2;
+$mocha_overlay1: #7f849c;
+$mocha_overlay0: #6c7086;
+$mocha_surface2: #585b70;
+$mocha_surface1: #45475a;
+$mocha_surface0: #313244;
+$mocha_base: #1e1e2e;
+$mocha_mantle: #181825;
+$mocha_crust: #11111b;
+
+$gap: 1rem;
+$corner: 0.5rem;
+
+$brand_colors: (
+    "discord": (
+        "foreground": #ffffff,
+        "background": #5865f2,
+    ),
+    "spotify": (
+        "foreground": #1db954,
+        "background": #181825,
+    ),
+    "twitter": (
+        "foreground": #ffffff,
+        "background": #1da1f2,
+    ),
+    "youtube": (
+        "foreground": #ffffff,
+        "background": #ff0000,
+    ),
+    "twitch": (
+        "foreground": #ffffff,
+        "background": #9146ff,
+    ),
+    "cloudflare": (
+        "foreground": #ffffff,
+        "background": #f38020,
+    ),
+    "stackoverflow": (
+        "foreground": #ffffff,
+        "background": #f48024,
+    ),
+    "github": (
+        "foreground": #ffffff,
+        "background": #333333,
+    ),
+    "lastfm": (
+        "foreground": #ffffff,
+        "background": #d51007,
+    ),
+    "gmail": (
+        "foreground": #ffffff,
+        "background": #ea4335,
+    ),
+);

@@ -1,43 +1,31 @@
-# Astro Starter Kit: Minimal
+# My Startpage
+My new tab page, featuring a clean and minimalistic design with [Catppuccin](https://www.catppuccin.dev/) colors.
 
-```sh
-pnpm create astro@latest -- --template minimal
-```
+## Features
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- [x] Realtime, performant clock widget
+- [x] Shortcuts I regularly use
+- [x] Add & remove bookmarks
+- [x] Organize bookmarks in folders
+- [ ] Search bookmarks
+- [ ] Move bookmarks between folders
+- [ ] Button tooltips to clarify actions
+- [ ] Weather API integration(?)
+- [ ] Settings for things like:
+  - [ ] Theme (Mocha, Macchiato, Latte, Frappe)
+  - [ ] Background image(s?)
+  - [ ] Location (for time & weather)
+  - [ ] Search engine (Google, DuckDuckGo, Bing, Kagi, Etc.)
+- [ ] Customizable shortcuts
+- [ ] Keyboard shortcuts
+- [ ] Recent searches index
+- [ ] Custom bookmark colors & icons
 
-## 🚀 Project Structure
+## Screenshots
+![screenshot](https://i-have-a.degradationk.ink/Lizzy68d2398bwbMW9Yem0qt5.png)
+![screenshot](https://i-have-a.degradationk.ink/Lizzy68d239e8jRWRHYEkp84G.png)
+![screenshot](https://i-have-a.degradationk.ink/Lizzy68d23a171ochIzYsHwmD.png)
+![screenshot](https://i-have-a.degradationk.ink/Lizzy68d23a28FgcReIXlkj03.png)
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

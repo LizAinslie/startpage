@@ -1,0 +1,36 @@
+@use "vars";
+@use "sass:map";
+@use "sass:math";
+
+.clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.5rem;
+    font-weight: light;
+
+    & .separator {
+        margin: 0 vars.$gap;
+        width: 0;
+        height: 100%;
+        border: 1px solid vars.$mocha_surface2;
+    }
+
+    & .time_component {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: math.div(vars.$gap, 2);
+
+        font-size: 1.25rem;
+        font-weight: light;
+
+        color: vars.$mocha_subtext0;
+
+        & .icon {
+            font-size: 1.75rem;
+            color: map.get(vars.$mocha_colors, "mauve");
+        }
+    }
+}

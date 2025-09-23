@@ -1,0 +1,52 @@
+@use "vars";
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+
+.shortcuts {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: vars.$gap;
+    width: 100%;
+
+    & .shortcut {
+        aspect-ratio: 1/1;
+        width: 100%;
+        border-radius: vars.$corner;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-width: 1px;
+        border-style: solid;
+
+        cursor: pointer;
+
+        & svg {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        @each $name, $colors in vars.$brand_colors {
+            &.#{$name} {
+                color: map.get($colors, "foreground");
+                background-color: map.get($colors, "background");
+                border-color: color.scale(
+                    map.get($colors, "background"),
+                    $lightness: +20%
+                );
+
+                &:hover {
+                    background-color: color.scale(
+                        map.get($colors, "background"),
+                        $lightness: -10%
+                    );
+                    border-color: color.scale(
+                        map.get($colors, "background"),
+                        $lightness: +10%
+                    );
+                }
+            }
+        }
+    }
+}

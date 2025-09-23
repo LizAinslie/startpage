@@ -1,0 +1,198 @@
+import type { FC, MouseEvent } from "react";
+import { useState } from "react";
+import {
+  BookmarkType,
+  type BookmarkItem,
+  type BookmarkItemFolder,
+  type BookmarkItemUrl,
+} from "../../types/bookmarks";
+import { BookmarkList } from "./BookmarkList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBookmark,
+  faFolder,
+  faFolderOpen,
+  faLink,
+  faPlus,
+  faPencil,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
+export type BookmarkPropsBase = {
+  bookmark: BookmarkItem;
+};
+
+export type FolderBookmarkProps = BookmarkPropsBase & {
+  bookmark: BookmarkItemFolder;
+  createFolder: (parent: BookmarkItemFolder) => void;
+  createBookmark: (parent: BookmarkItemFolder) => void;
+  deleteBookmark: (bookmark: BookmarkItem) => void;
+  editBookmark: (bookmark: BookmarkItemUrl) => void;
+  editFolder: (folder: BookmarkItemFolder) => void;
+};
+
+export const FolderBookmark: FC<FolderBookmarkProps> = ({
+  bookmark,
+  createFolder,
+  createBookmark,
+  deleteBookmark,
+  editBookmark,
+  editFolder,
+}) => {
+  const [open, setOpen] = useState(false);
+
+  function handleCreateFolder(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    createFolder(bookmark);
+  }
+
+  function handleCreateBookmark(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    createBookmark(bookmark);
+  }
+
+  function handleDelete(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    deleteBookmark(bookmark);
+  }
+
+  function handleEdit(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    editFolder(bookmark);
+  }
+
+  return (
+    <li className="bookmark_item">
+      <span onClick={() => setOpen(!open)} className="bookmark_title">
+        <FontAwesomeIcon icon={open ? faFolderOpen : faFolder} />
+        {bookmark.title}
+        <div style={{ flexGrow: "1" }} /> {/* spacer */}
+        <div className="bookmark_actions">
+          <button className="bookmark_action" onClick={handleCreateBookmark}>
+            <FontAwesomeIcon
+              icon={faPlus}
+              transform={{ size: 8, y: -1 }}
+              mask={faBookmark}
+            />
+          </button>
+
+          <button className="bookmark_action" onClick={handleCreateFolder}>
+            <FontAwesomeIcon
+              icon={faPlus}
+              transform={{ size: 8 }}
+              mask={faFolder}
+            />
+          </button>
+
+          <button className="bookmark_action" onClick={handleDelete}>
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+
+          <button className="bookmark_action" onClick={handleEdit}>
+            <FontAwesomeIcon icon={faPencil} />
+          </button>
+        </div>
+      </span>
+
+      {open && (
+        <div className="bookmark_children">
+          <BookmarkList
+            createBookmark={createBookmark}
+            createFolder={createFolder}
+            deleteBookmark={deleteBookmark}
+            editBookmark={editBookmark}
+            editFolder={editFolder}
+            bookmarks={bookmark.children}
+          />
+        </div>
+      )}
+    </li>
+  );
+};
+
+export type UrlBookmarkProps = BookmarkPropsBase & {
+  bookmark: BookmarkItemUrl;
+  editBookmark: (bookmark: BookmarkItemUrl) => void;
+  deleteBookmark: (bookmark: BookmarkItem) => void;
+};
+
+export const UrlBookmark: FC<UrlBookmarkProps> = ({
+  bookmark,
+  editBookmark,
+  deleteBookmark,
+}) => {
+  function handleEdit(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    editBookmark(bookmark);
+  }
+
+  function handleDelete(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteBookmark(bookmark);
+  }
+
+  return (
+    <a
+      href={bookmark.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="bookmark_title"
+    >
+      <FontAwesomeIcon icon={faLink} />
+      {bookmark.title}
+      <div style={{ flexGrow: "1" }} /> {/* spacer */}
+      <div className="bookmark_actions">
+        <button onClick={handleEdit}>
+          <FontAwesomeIcon icon={faPencil} />
+        </button>
+        <button onClick={handleDelete}>
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
+      </div>
+    </a>
+  );
+};
+
+export type BookmarkProps = BookmarkPropsBase & {
+  bookmark: BookmarkItem;
+  createFolder: (parent: BookmarkItemFolder) => void;
+  createBookmark: (parent: BookmarkItemFolder) => void;
+  deleteBookmark: (bookmark: BookmarkItem) => void;
+  editBookmark: (bookmark: BookmarkItemUrl) => void;
+  editFolder: (folder: BookmarkItemFolder) => void;
+};
+
+export const Bookmark: FC<BookmarkProps> = ({
+  bookmark,
+  createFolder,
+  createBookmark,
+  deleteBookmark,
+  editBookmark,
+  editFolder,
+}) => {
+  const buildInnerBookmark = () => {
+    if (bookmark.type === BookmarkType.URL)
+      return (
+        <UrlBookmark
+          bookmark={bookmark}
+          deleteBookmark={deleteBookmark}
+          editBookmark={editBookmark}
+        />
+      );
+    else if (bookmark.type === BookmarkType.FOLDER)
+      return (
+        <FolderBookmark
+          bookmark={bookmark}
+          createFolder={createFolder}
+          createBookmark={createBookmark}
+          deleteBookmark={deleteBookmark}
+          editBookmark={editBookmark}
+          editFolder={editFolder}
+        />
+      );
+  };
+
+  return <li className="bookmark_item">{buildInnerBookmark()}</li>;
+};

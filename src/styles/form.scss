@@ -1,0 +1,52 @@
+@use "vars";
+@use "sass:math";
+@use "sass:map";
+@use "sass:color";
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$gap;
+}
+
+.form_input {
+    display: flex;
+    flex-direction: column;
+    gap: math.div(vars.$gap, 2);
+
+    & label {
+        font-weight: bold;
+        font-size: 0.75rem;
+    }
+}
+
+ul.form_errors {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    & li {
+        color: map.get(vars.$mocha_colors, "red");
+    }
+}
+
+input {
+    background-color: vars.$mocha_mantle;
+    border: 1px solid vars.$mocha_surface0;
+    border-radius: vars.$corner;
+    padding: 0.5rem 1rem;
+    color: vars.$mocha_text;
+
+    transition:
+        outline 0.25s,
+        border-color 0.25s;
+
+    &:focus {
+        outline: 0.25rem solid
+            color.scale(
+                $color: map.get(vars.$mocha_colors, "mauve"),
+                $alpha: -70%
+            );
+        border-color: map.get(vars.$mocha_colors, "mauve");
+    }
+}

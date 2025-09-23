@@ -1,0 +1,16 @@
+@use "sass:map";
+@use "vars";
+
+@each $color_name, $color_value in vars.$mocha_colors {
+    .text-#{$color_name} {
+        color: $color_value;
+    }
+}
+
+h1.title {
+    font-family: "Bellota", cursive;
+    font-size: 4rem;
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 0;
+}

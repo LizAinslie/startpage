@@ -1,0 +1,11 @@
+@use "sass:map";
+@use "sass:color";
+@use "vars";
+
+form#search {
+    width: 100%;
+
+    & input {
+        width: 100%;
+    }
+}

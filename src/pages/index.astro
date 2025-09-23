@@ -1,16 +1,89 @@
 ---
+import "@fontsource/bellota";
+import "@fontsource/iosevka";
+import "../styles/root.scss";
+import "../styles/text.scss";
+import "../styles/search.scss";
+import "../styles/layout.scss";
+import "../styles/dialog.scss";
+import "../styles/bookmarks.scss";
+import "../styles/form.scss";
 
+import Bookmarks from "../components/bookmarks/Bookmarks";
+import Clock from "../components/Clock";
+import Shortcuts from "../components/Shortcuts";
+
+import {
+    faBookmark,
+    faPlus,
+    faFolder,
+    faLink,
+    faFolderOpen,
+    faEnvelope,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCloudflare,
+    faDiscord,
+    faGithub,
+    faTwitch,
+    faTwitter,
+    faYoutube,
+    faSpotify,
+    faStackOverflow,
+    faLastfm,
+} from "@fortawesome/free-brands-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+library.add(
+    faBookmark,
+    faPlus,
+    faFolder,
+    faLink,
+    faFolderOpen,
+    faEnvelope,
+
+    // brands
+    faCloudflare,
+    faDiscord,
+    faGithub,
+    faTwitch,
+    faTwitter,
+    faYoutube,
+    faSpotify,
+    faStackOverflow,
+    faLastfm,
+);
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Mey's Startpage</title>
+    </head>
+    <body>
+        <main>
+            <div class="column">
+                <h1 class="title">
+                    <!-- what the fuck is this wrapping lol -->
+                    <span class="text-red">M</span><span class="text-yellow"
+                        >e</span
+                    ><span class="text-green">y</span><span class="text-blue"
+                        >'</span
+                    ><span class="text-mauve">s</span> Startpage
+                </h1>
+
+                <Clock client:only />
+
+                <form id="search" action="https://google.com" method="GET">
+                    <input name="q" type="search" placeholder="Search" />
+                </form>
+
+                <Shortcuts client:only />
+            </div>
+            <div class="column">
+                <Bookmarks client:only />
+            </div>
+        </main>
+    </body>
 </html>

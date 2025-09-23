@@ -3,6 +3,35 @@
 @use "sass:map";
 @use "sass:color";
 
+@mixin input_base {
+    background-color: transparent;
+    padding: 0.5rem 1rem;
+    color: vars.$mocha_text;
+
+    &::placeholder {
+        font-family: vars.$body_font;
+    }
+}
+
+@mixin input_shape {
+    @include input_base;
+
+    background-color: vars.$mocha_mantle;
+    border: 1px solid vars.$mocha_surface0;
+    border-radius: vars.$corner;
+    color: vars.$mocha_text;
+
+    transition:
+        outline 0.25s,
+        border-color 0.25s;
+}
+
+@mixin input_focus {
+    outline: 0.25rem solid
+        color.scale($color: map.get(vars.$mocha_colors, "mauve"), $alpha: -70%);
+    border-color: map.get(vars.$mocha_colors, "mauve");
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -31,26 +60,9 @@ ul.form_errors {
 }
 
 input {
-    background-color: vars.$mocha_mantle;
-    border: 1px solid vars.$mocha_surface0;
-    border-radius: vars.$corner;
-    padding: 0.5rem 1rem;
-    color: vars.$mocha_text;
-
-    &::placeholder {
-        font-family: vars.$body_font;
-    }
-
-    transition:
-        outline 0.25s,
-        border-color 0.25s;
+    @include input_shape;
 
     &:focus {
-        outline: 0.25rem solid
-            color.scale(
-                $color: map.get(vars.$mocha_colors, "mauve"),
-                $alpha: -70%
-            );
-        border-color: map.get(vars.$mocha_colors, "mauve");
+        @include input_focus;
     }
 }

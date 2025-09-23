@@ -62,6 +62,18 @@
             flex-grow: 1;
             padding: 1rem;
             overflow-y: scroll;
+
+            &:not(:last-of-type) {
+                border-bottom: 1px solid vars.$mocha_surface0;
+            }
+
+            &.error {
+                background-color: color.scale(
+                    map.get(vars.$mocha_colors, "red"),
+                    $lightness: -80%,
+                    $alpha: -70%
+                );
+            }
         }
 
         & .dialog_footer {

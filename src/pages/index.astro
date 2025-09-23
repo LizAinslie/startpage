@@ -13,6 +13,8 @@ import Bookmarks from "../components/bookmarks/Bookmarks";
 import Clock from "../components/Clock";
 import Shortcuts from "../components/Shortcuts";
 
+import SearchBar from "../components/search/SearchBar";
+
 import {
     faBookmark,
     faPlus,
@@ -74,11 +76,7 @@ library.add(
                 </h1>
 
                 <Clock client:only />
-
-                <form id="search" action="https://google.com" method="GET">
-                    <input name="q" type="search" placeholder="Search" />
-                </form>
-
+                <SearchBar client:only />
                 <Shortcuts client:only />
             </div>
             <div class="column">

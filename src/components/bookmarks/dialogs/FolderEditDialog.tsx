@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogContent,
   type DialogPropsBase,
+  DialogError,
 } from "../../dialog";
 import { FormErrors } from "../../form/FormErrors";
 
@@ -61,9 +62,12 @@ export const FolderEditDialog: FC<FolderEditDialogProps> = ({
   return (
     <Dialog open={open}>
       <DialogHeader title="Edit Folder" showCloseButton onClose={onClose} />
-
+      {errors.length > 0 && (
+        <DialogError heading="Errors:">
+          <FormErrors errors={errors} />
+        </DialogError>
+      )}
       <DialogContent>
-        <FormErrors errors={errors} />
         <div className="form_input">
           <label htmlFor="folder-name">Folder Name:</label>
           <input

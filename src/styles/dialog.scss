@@ -20,7 +20,6 @@
     & .dialog {
         border-radius: vars.$corner;
         background-color: vars.$mocha_mantle;
-        border: 1px solid vars.$mocha_surface0;
         max-width: 80%;
         max-height: 80%;
         display: flex;
@@ -28,12 +27,28 @@
 
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
+        & > * {
+            border-left: 1px solid vars.$mocha_surface0;
+            border-right: 1px solid vars.$mocha_surface0;
+            border-bottom: 1px solid vars.$mocha_surface0;
+
+            &:first-child {
+                border-top-left-radius: vars.$corner;
+                border-top-right-radius: vars.$corner;
+                border-top: 1px solid vars.$mocha_surface0;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: vars.$corner;
+                border-bottom-right-radius: vars.$corner;
+            }
+        }
+
         & .dialog_header {
             display: flex;
             flex-direction: row;
             align-items: center;
             padding: 0.5rem 1rem;
-            border-bottom: 1px solid vars.$mocha_surface0;
 
             & h3 {
                 font-family: vars.$display_font;
@@ -63,16 +78,38 @@
             padding: 1rem;
             overflow-y: scroll;
 
-            &:not(:last-of-type) {
-                border-bottom: 1px solid vars.$mocha_surface0;
+            & .heading {
+                display: flex;
+                align-items: center;
+                gap: vars.$gap / 2;
+                font-weight: 500;
+                font-size: 1.1rem;
+                font-family: vars.$display_font;
             }
 
             &.error {
+                display: flex;
+                flex-direction: column;
+                gap: vars.$gap / 2;
+                color: map.get(vars.$mocha_colors, "red");
+                padding: 0.5rem 1rem;
+
                 background-color: color.scale(
                     map.get(vars.$mocha_colors, "red"),
                     $lightness: -80%,
                     $alpha: -70%
                 );
+                border-color: color.scale(
+                    map.get(vars.$mocha_colors, "red"),
+                    $saturation: -50%,
+                    $lightness: -20%
+                );
+                border-top: 1px solid
+                    color.scale(
+                        map.get(vars.$mocha_colors, "red"),
+                        $saturation: -50%,
+                        $lightness: -20%
+                    );
             }
         }
 
@@ -81,7 +118,6 @@
             justify-content: flex-end;
             gap: vars.$gap;
             padding: 0.5rem 1rem;
-            border-top: 1px solid vars.$mocha_surface0;
 
             & button {
                 padding: 0.25rem 0.5rem;

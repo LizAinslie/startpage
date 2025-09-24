@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogContent,
   type DialogPropsBase,
+  DialogError,
 } from "../../dialog";
 import { FormErrors } from "../../form/FormErrors";
 import type { BookmarkItemUrl } from "../../../types/bookmarks";
@@ -71,8 +72,12 @@ export const BookmarkEditDialog: FC<BookmarkEditDialogProps> = ({
   return (
     <Dialog open={open}>
       <DialogHeader title="Edit Bookmark" onClose={close} showCloseButton />
+      {errors.length > 0 && (
+        <DialogError heading="Errors:">
+          <FormErrors errors={errors} />
+        </DialogError>
+      )}
       <DialogContent className="form">
-        <FormErrors errors={errors} />
         <div className="form_input">
           <label htmlFor="title">Title</label>
           <input

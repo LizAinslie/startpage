@@ -7,9 +7,12 @@ My new tab page, featuring a clean and minimalistic design with [Catppuccin](htt
 - [x] Shortcuts I regularly use
 - [x] Add & remove bookmarks
 - [x] Organize bookmarks in folders
-- [ ] Search bookmarks
+- [x] Search bookmarks
 - [ ] Move bookmarks between folders
-- [ ] Button tooltips to clarify actions
+- [ ] Tooltips for:
+  - [ ] Buttons (to clarify actions)
+  - [ ] Bookmarks (to show URLs)
+  - [ ] folders (to show number of bookmarks)
 - [ ] Weather API integration(?)
 - [ ] Settings for things like:
   - [ ] Theme (Mocha, Macchiato, Latte, Frappe)
@@ -18,6 +21,10 @@ My new tab page, featuring a clean and minimalistic design with [Catppuccin](htt
   - [ ] Search engine (Google, DuckDuckGo, Bing, Kagi, Etc.)
 - [ ] Customizable shortcuts
 - [ ] Keyboard shortcuts
+  - [x] To focus search
+  - [ ] To Navigate bookmarks & shortcuts
+- [ ] Rotating tips at the bottom of the screen
+  - [ ] Remind keybinds
 - [ ] Recent searches index
 - [ ] Custom bookmark colors & icons
 

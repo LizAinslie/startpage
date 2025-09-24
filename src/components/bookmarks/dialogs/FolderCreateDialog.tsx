@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogContent,
   type DialogPropsBase,
+  DialogError,
 } from "../../dialog";
 import { useBookmarksStore } from "../../../store/bookmarks";
 import type { BookmarkItemFolder } from "../../../types/bookmarks";
@@ -62,8 +63,12 @@ export const FolderCreateDialog: FC<FolderCreateDialogProps> = ({
   return (
     <Dialog open={open}>
       <DialogHeader title={dialogTitle} onClose={onClose} />
+      {errors.length > 0 && (
+        <DialogError heading="Errors:">
+          <FormErrors errors={errors} />
+        </DialogError>
+      )}
       <DialogContent className="form">
-        <FormErrors errors={errors} />
         <div className="form_input">
           <label htmlFor="folder-name">Folder Name:</label>
           <input

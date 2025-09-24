@@ -50,12 +50,13 @@
 }
 
 ul.form_errors {
-    list-style-type: none;
     padding: 0;
+    padding-left: 1rem;
     margin: 0;
 
     & li {
         color: map.get(vars.$mocha_colors, "red");
+        font-size: 0.9rem;
     }
 }
 

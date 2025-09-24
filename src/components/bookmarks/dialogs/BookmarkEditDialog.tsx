@@ -1,33 +1,37 @@
-import { useState, type FC, type FormEvent } from "react";
-import { Dialog, type DialogPropsBase } from "../dialog/Dialog";
-import { DialogContent } from "../dialog/DialogContent";
-import { DialogHeader } from "../dialog/DialogHeader";
-import { DialogActionButton } from "../dialog/DialogActionButton";
-import { useBookmarksStore } from "../../store/bookmarks";
-import { DialogFooter } from "../dialog/DialogFooter";
-import type { BookmarkItemFolder } from "../../types/bookmarks";
-import { isUrl } from "../../util/url";
-import { FormErrors } from "../form/FormErrors";
+import { useState, type FC } from "react";
+import { useBookmarksStore } from "../../../store/bookmarks";
+import { isUrl } from "../../../util/url";
+import {
+  Dialog,
+  DialogFooter,
+  DialogActionButton,
+  DialogHeader,
+  DialogContent,
+  type DialogPropsBase,
+} from "../../dialog";
+import { FormErrors } from "../../form/FormErrors";
+import type { BookmarkItemUrl } from "../../../types/bookmarks";
 
-export type BookmarkCreateDialogProps = DialogPropsBase & {
+export type BookmarkEditDialogProps = DialogPropsBase & {
   onClose: () => void;
-  parent?: BookmarkItemFolder;
+  bookmark?: BookmarkItemUrl;
 };
 
-export const BookmarkCreateDialog: FC<BookmarkCreateDialogProps> = ({
+export const BookmarkEditDialog: FC<BookmarkEditDialogProps> = ({
   open,
   onClose,
-  parent,
+  bookmark,
 }) => {
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
+  if (!bookmark) return null;
+
+  const [title, setTitle] = useState(bookmark.title || "");
+  const [url, setUrl] = useState(bookmark.url || "");
+
   const [errors, setErrors] = useState<string[]>([]);
 
-  const createBookmark = useBookmarksStore((store) => store.createBookmark);
+  const editBookmark = useBookmarksStore((state) => state.editBookmark);
 
   function checkErrors() {
-    setErrors([]);
-
     if (!title.trim()) {
       setErrors((prev) => [...prev, "Bookmark name is required"]);
     }
@@ -49,9 +53,10 @@ export const BookmarkCreateDialog: FC<BookmarkCreateDialogProps> = ({
   }
 
   function save() {
+    if (!bookmark) return;
     checkErrors();
     if (errors.length === 0) {
-      createBookmark(title.trim(), url.trim(), parent?.id);
+      editBookmark(bookmark.id, title, url);
       close();
     }
   }
@@ -63,50 +68,46 @@ export const BookmarkCreateDialog: FC<BookmarkCreateDialogProps> = ({
     onClose();
   }
 
-  const dialogTitle = parent
-    ? `Create Bookmark in ${parent.title}`
-    : "Create Bookmark";
-
   return (
     <Dialog open={open}>
-      <DialogHeader title={dialogTitle} onClose={onClose} />
+      <DialogHeader title="Edit Bookmark" onClose={close} showCloseButton />
       <DialogContent className="form">
         <FormErrors errors={errors} />
         <div className="form_input">
-          <label htmlFor="bookmark-name">Bookmark Name:</label>
+          <label htmlFor="title">Title</label>
           <input
+            id="title"
             type="text"
-            id="bookmark-name"
-            placeholder="My Bookmark"
             value={title}
-            required
+            placeholder="My Bookmark"
             onChange={(e) => setTitle(e.target.value)}
+            required
             onBlur={checkErrors}
           />
         </div>
         <div className="form_input">
-          <label htmlFor="bookmark-url">URL:</label>
+          <label htmlFor="url">URL</label>
           <input
+            id="url"
             type="text"
-            id="bookmark-url"
-            placeholder="https://example.com"
             value={url}
+            placeholder="https://example.com"
+            onBlur={checkErrors}
             required
             onChange={(e) => setUrl(e.target.value)}
-            onBlur={checkErrors}
           />
         </div>
       </DialogContent>
       <DialogFooter>
-        <DialogActionButton type="cancel" onClick={close}>
+        <DialogActionButton onClick={close} type="cancel">
           Cancel
         </DialogActionButton>
         <DialogActionButton
-          type="confirm"
           onClick={save}
+          type="confirm"
           disabled={errors.length > 0}
         >
-          Create
+          Save
         </DialogActionButton>
       </DialogFooter>
     </Dialog>

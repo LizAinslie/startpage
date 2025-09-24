@@ -38,6 +38,9 @@ dependencies:
   astro:
     specifier: ^5.13.10
     version: 5.13.10(sass@1.93.0)(typescript@5.9.2)
+  fast-deep-equal:
+    specifier: ^3.1.3
+    version: 3.1.3
   react:
     specifier: ^19.1.1
     version: 19.1.1
@@ -50,6 +53,9 @@ dependencies:
   zustand:
     specifier: ^5.0.8
     version: 5.0.8(@types/react@19.1.13)(react@19.1.1)
+  zustand-computed:
+    specifier: ^2.1.0
+    version: 2.1.0(react@19.1.1)(zustand@5.0.8)
 
 packages:
 
@@ -3542,6 +3548,16 @@ packages:
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+    dev: false
+
+  /zustand-computed@2.1.0(react@19.1.1)(zustand@5.0.8):
+    resolution: {integrity: sha512-KX/giJu5L6QeWLsSDe1bHRKUxMsGeYHmrP20Ys9bKHlHJC6THsPTK3k0iAX4WoJ/a6c+qaNBUjF24WigAsLTVQ==}
+    peerDependencies:
+      react: '>=18.2.0 <20.0.0'
+      zustand: '>=5.0.0 <6.0.0'
+    dependencies:
+      react: 19.1.1
+      zustand: 5.0.8(@types/react@19.1.13)(react@19.1.1)
     dev: false
 
   /zustand@5.0.8(@types/react@19.1.13)(react@19.1.1):

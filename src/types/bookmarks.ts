@@ -20,3 +20,8 @@ export type BookmarkItemFolder = BookmarkItemBase & {
 };
 
 export type BookmarkItem = BookmarkItemUrl | BookmarkItemFolder;
+
+export type BookmarkSearchResultItem = {
+  bookmark: BookmarkItemUrl;
+  hierarchy: string[];
+};

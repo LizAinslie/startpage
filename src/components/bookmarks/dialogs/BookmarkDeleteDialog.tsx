@@ -1,11 +1,14 @@
 import type { FC } from "react";
-import { Dialog, type DialogPropsBase } from "../dialog/Dialog";
-import { DialogHeader } from "../dialog/DialogHeader";
-import { BookmarkType, type BookmarkItem } from "../../types/bookmarks";
-import { DialogContent } from "../dialog/DialogContent";
-import { DialogFooter } from "../dialog/DialogFooter";
-import { DialogActionButton } from "../dialog/DialogActionButton";
-import { useBookmarksStore } from "../../store/bookmarks";
+import {
+  Dialog,
+  DialogFooter,
+  DialogActionButton,
+  DialogHeader,
+  DialogContent,
+  type DialogPropsBase,
+} from "../../dialog";
+import { BookmarkType, type BookmarkItem } from "../../../types/bookmarks";
+import { useBookmarksStore } from "../../../store/bookmarks";
 
 export type BookmarkDeleteDialogProps = DialogPropsBase & {
   onClose: () => void;

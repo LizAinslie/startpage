@@ -1,11 +1,11 @@
-import { useState, type FC } from "react";
+import { useMemo, useState, type FC } from "react";
 
 import { useBookmarksStore } from "../../store/bookmarks";
 import { BookmarkList } from "./BookmarkList";
-import { FolderCreateDialog } from "./FolderCreateDialog";
+import { FolderCreateDialog } from "./dialogs/FolderCreateDialog";
 
 import "../../styles/bookmarks.scss";
-import { BookmarkCreateDialog } from "./BookmarkCreateDialog";
+import { BookmarkCreateDialog } from "./dialogs/BookmarkCreateDialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
@@ -16,13 +16,28 @@ import type {
   BookmarkItem,
   BookmarkItemFolder,
   BookmarkItemUrl,
+  BookmarkSearchResultItem,
 } from "../../types/bookmarks";
-import { BookmarkDeleteDialog } from "./BookmarkDeleteDialog";
-import { BookmarkEditDialog } from "./BookmarkEditDialog";
-import { FolderEditDialog } from "./FolderEditDialog";
+import { BookmarkDeleteDialog } from "./dialogs/BookmarkDeleteDialog";
+import { BookmarkEditDialog } from "./dialogs/BookmarkEditDialog";
+import { FolderEditDialog } from "./dialogs/FolderEditDialog";
+import { BookmarkSearchResults } from "./search/BookmarkSearchResults";
 
 const Bookmarks: FC = () => {
   const bookmarks = useBookmarksStore((store) => store.bookmarks);
+
+  const searchable = useBookmarksStore((store) => store.searchIndex);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searching = useMemo(() => searchTerm !== "", [searchTerm]);
+  const searchResults = useMemo((): BookmarkSearchResultItem[] => {
+    if (searchTerm === "") return searchable;
+    else
+      return searchable.filter(
+        ({ bookmark }) =>
+          bookmark.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          bookmark.url.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+  }, [searchTerm, searchable]);
 
   const [folderCreateDialogOpen, setFolderCreateDialogOpen] = useState(false);
   const [folderCreateDialogParent, setFolderCreateDialogParent] = useState<
@@ -104,17 +119,31 @@ const Bookmarks: FC = () => {
     <div className="bookmarks">
       <div className="header">
         <h2>Bookmarks</h2>
+        <input
+          type="search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search Bookmarks"
+        />
       </div>
 
       <div className="content">
-        <BookmarkList
-          bookmarks={bookmarks}
-          createFolder={openFolderCreateDialog}
-          createBookmark={openBookmarkCreateDialog}
-          deleteBookmark={openBookmarkDeleteDialog}
-          editBookmark={openBookmarkEditDialog}
-          editFolder={openFolderEditDialog}
-        />
+        {searching ? (
+          <BookmarkSearchResults
+            results={searchResults}
+            editBookmark={openBookmarkEditDialog}
+            deleteBookmark={openBookmarkDeleteDialog}
+          />
+        ) : (
+          <BookmarkList
+            bookmarks={bookmarks}
+            createFolder={openFolderCreateDialog}
+            createBookmark={openBookmarkCreateDialog}
+            deleteBookmark={openBookmarkDeleteDialog}
+            editBookmark={openBookmarkEditDialog}
+            editFolder={openFolderEditDialog}
+          />
+        )}
       </div>
 
       <div className="footer">

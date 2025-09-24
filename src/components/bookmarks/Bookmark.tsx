@@ -17,6 +17,7 @@ import {
   faPencil,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { CommonBookmarkActions } from "./CommonBookmarkActions";
 
 export type BookmarkPropsBase = {
   bookmark: BookmarkItem;
@@ -51,23 +52,15 @@ export const FolderBookmark: FC<FolderBookmarkProps> = ({
     createBookmark(bookmark);
   }
 
-  function handleDelete(e: MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    deleteBookmark(bookmark);
-  }
-
-  function handleEdit(e: MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    editFolder(bookmark);
-  }
-
   return (
     <li className="bookmark_item">
-      <span onClick={() => setOpen(!open)} className="bookmark_title">
-        <FontAwesomeIcon icon={open ? faFolderOpen : faFolder} />
-        {bookmark.title}
+      <span onClick={() => setOpen(!open)} className="bookmark_line">
+        <span className="title">
+          <FontAwesomeIcon icon={open ? faFolderOpen : faFolder} />
+          {bookmark.title}
+        </span>
         <div style={{ flexGrow: "1" }} /> {/* spacer */}
-        <div className="bookmark_actions">
+        <div className="actions">
           <button className="bookmark_action" onClick={handleCreateBookmark}>
             <FontAwesomeIcon
               icon={faPlus}
@@ -84,13 +77,10 @@ export const FolderBookmark: FC<FolderBookmarkProps> = ({
             />
           </button>
 
-          <button className="bookmark_action" onClick={handleDelete}>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-
-          <button className="bookmark_action" onClick={handleEdit}>
-            <FontAwesomeIcon icon={faPencil} />
-          </button>
+          <CommonBookmarkActions
+            editFn={() => editFolder(bookmark)}
+            deleteFn={() => deleteBookmark(bookmark)}
+          />
         </div>
       </span>
 
@@ -121,35 +111,23 @@ export const UrlBookmark: FC<UrlBookmarkProps> = ({
   editBookmark,
   deleteBookmark,
 }) => {
-  function handleEdit(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    editBookmark(bookmark);
-  }
-
-  function handleDelete(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    deleteBookmark(bookmark);
-  }
-
   return (
     <a
       href={bookmark.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="bookmark_title"
+      className="bookmark_line"
     >
-      <FontAwesomeIcon icon={faLink} />
-      {bookmark.title}
+      <span className="title">
+        <FontAwesomeIcon icon={faLink} />
+        {bookmark.title}
+      </span>
       <div style={{ flexGrow: "1" }} /> {/* spacer */}
-      <div className="bookmark_actions">
-        <button onClick={handleEdit}>
-          <FontAwesomeIcon icon={faPencil} />
-        </button>
-        <button onClick={handleDelete}>
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+      <div className="actions">
+        <CommonBookmarkActions
+          editFn={() => editBookmark(bookmark)}
+          deleteFn={() => deleteBookmark(bookmark)}
+        />
       </div>
     </a>
   );

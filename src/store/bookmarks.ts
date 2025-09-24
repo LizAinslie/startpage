@@ -1,20 +1,65 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { createComputed } from "zustand-computed";
+
+import eq from "fast-deep-equal";
+
 import {
   BookmarkType,
   type BookmarkItem,
   type BookmarkItemFolder,
   type BookmarkItemUrl,
+  type BookmarkSearchResultItem,
 } from "../types/bookmarks";
-import { persist, createJSONStorage } from "zustand/middleware";
 
-interface BookmarksState {
+type BookmarksStore = {
   bookmarks: BookmarkItem[];
   createBookmark: (title: string, url: string, parentId?: string) => void;
   createFolder: (title: string, parentId?: string) => void;
   deleteBookmark: (bookmarkId: string) => void;
   editBookmark: (bookmarkId: string, newTitle: string, newUrl: string) => void;
   editFolder: (folderId: string, newTitle: string) => void;
+};
+
+function walkAndFlattenBookmarks(
+  bookmarks: BookmarkItem[],
+  hierarchy: string[] = [],
+): BookmarkSearchResultItem[] {
+  const result: BookmarkSearchResultItem[] = [];
+
+  for (const bookmark of bookmarks)
+    if (bookmark.type === BookmarkType.URL)
+      result.push({
+        bookmark,
+        hierarchy: hierarchy,
+      });
+    else if (bookmark.type === BookmarkType.FOLDER)
+      result.push(
+        ...walkAndFlattenBookmarks(bookmark.children, [
+          ...hierarchy,
+          bookmark.title,
+        ]),
+      );
+
+  return result;
 }
+
+/**
+ * ComputedBookmarksStore represents a computed store containing a search index
+ * that should be recalculated any time a bookmark is added, deleted or updated.
+ */
+type ComputedBookmarksStore = {
+  searchIndex: BookmarkSearchResultItem[];
+};
+
+const computed = createComputed(
+  (state: BookmarksStore): ComputedBookmarksStore => ({
+    searchIndex: walkAndFlattenBookmarks(state.bookmarks),
+  }),
+  {
+    shouldRecompute: (state, next) => !eq(state.bookmarks, next.bookmarks),
+  },
+);
 
 function walkAndCreateBookmark(
   bookmarks: BookmarkItem[],
@@ -167,63 +212,65 @@ function walkAndGenerateUuid(bookmarks: BookmarkItem[]): string {
   return newId;
 }
 
-export const useBookmarksStore = create<BookmarksState>()(
-  persist(
-    (set, get) => ({
-      bookmarks: [],
-      createBookmark: (title, url, parentId) => {
-        const newBookmark: BookmarkItemUrl = {
-          id: walkAndGenerateUuid(get().bookmarks),
-          type: BookmarkType.URL,
-          title,
-          url,
-        };
+export const useBookmarksStore = create<BookmarksStore>()(
+  computed(
+    persist(
+      (set, get) => ({
+        bookmarks: [],
+        createBookmark: (title, url, parentId) => {
+          const newBookmark: BookmarkItemUrl = {
+            id: walkAndGenerateUuid(get().bookmarks),
+            type: BookmarkType.URL,
+            title,
+            url,
+          };
 
-        set({
-          // update the bookmark by walking the tree and finding a parent BookmarkItemFolder
-          bookmarks: walkAndCreateBookmark(
-            get().bookmarks,
-            newBookmark,
-            parentId,
-          ),
-        });
-      },
-      createFolder: (title, parentId) => {
-        const newFolder: BookmarkItemFolder = {
-          id: walkAndGenerateUuid(get().bookmarks),
-          type: BookmarkType.FOLDER,
-          title,
-          children: [],
-        };
+          set({
+            // update the bookmark by walking the tree and finding a parent BookmarkItemFolder
+            bookmarks: walkAndCreateBookmark(
+              get().bookmarks,
+              newBookmark,
+              parentId,
+            ),
+          });
+        },
+        createFolder: (title, parentId) => {
+          const newFolder: BookmarkItemFolder = {
+            id: walkAndGenerateUuid(get().bookmarks),
+            type: BookmarkType.FOLDER,
+            title,
+            children: [],
+          };
 
-        set({
-          // update the bookmark by walking the tree and finding a parent BookmarkItemFolder
-          bookmarks: walkAndCreateBookmark(
-            get().bookmarks,
-            newFolder,
-            parentId,
-          ),
-        });
+          set({
+            // update the bookmark by walking the tree and finding a parent BookmarkItemFolder
+            bookmarks: walkAndCreateBookmark(
+              get().bookmarks,
+              newFolder,
+              parentId,
+            ),
+          });
+        },
+        editBookmark: (id, title, url) => {
+          set({
+            bookmarks: walkAndEditBookmark(get().bookmarks, id, title, url),
+          });
+        },
+        editFolder: (id, title) => {
+          set({
+            bookmarks: walkAndEditFolder(get().bookmarks, id, title),
+          });
+        },
+        deleteBookmark: (id) => {
+          set({
+            bookmarks: walkAndDeleteBookmark(get().bookmarks, id),
+          });
+        },
+      }),
+      {
+        name: "bookmarks",
+        storage: createJSONStorage(() => localStorage),
       },
-      editBookmark: (id, title, url) => {
-        set({
-          bookmarks: walkAndEditBookmark(get().bookmarks, id, title, url),
-        });
-      },
-      editFolder: (id, title) => {
-        set({
-          bookmarks: walkAndEditFolder(get().bookmarks, id, title),
-        });
-      },
-      deleteBookmark: (id) => {
-        set({
-          bookmarks: walkAndDeleteBookmark(get().bookmarks, id),
-        });
-      },
-    }),
-    {
-      name: "bookmarks",
-      storage: createJSONStorage(() => localStorage),
-    },
+    ),
   ),
 );

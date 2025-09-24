@@ -1,33 +1,38 @@
 import { useState, type FC } from "react";
-import { Dialog, type DialogPropsBase } from "../dialog/Dialog";
-import { DialogHeader } from "../dialog/DialogHeader";
-import { useBookmarksStore } from "../../store/bookmarks";
-import { DialogContent } from "../dialog/DialogContent";
-import { DialogFooter } from "../dialog/DialogFooter";
-import { DialogActionButton } from "../dialog/DialogActionButton";
-import type { BookmarkItemFolder } from "../../types/bookmarks";
-import { FormErrors } from "../form/FormErrors";
+import type { BookmarkItemFolder } from "../../../types/bookmarks";
+import { useBookmarksStore } from "../../../store/bookmarks";
+import {
+  Dialog,
+  DialogFooter,
+  DialogActionButton,
+  DialogHeader,
+  DialogContent,
+  type DialogPropsBase,
+} from "../../dialog";
+import { FormErrors } from "../../form/FormErrors";
 
-export type FolderCreateDialogProps = DialogPropsBase & {
+export type FolderEditDialogProps = DialogPropsBase & {
+  folder?: BookmarkItemFolder;
   onClose: () => void;
-  parent?: BookmarkItemFolder;
 };
 
-export const FolderCreateDialog: FC<FolderCreateDialogProps> = ({
+export const FolderEditDialog: FC<FolderEditDialogProps> = ({
+  folder,
   open,
   onClose,
-  parent,
 }) => {
-  const [title, setTitle] = useState("");
-  const createFolder = useBookmarksStore((state) => state.createFolder);
+  if (!folder) return null;
 
+  const [title, setTitle] = useState(folder.title);
   const [errors, setErrors] = useState<string[]>([]);
+
+  const editFolder = useBookmarksStore((store) => store.editFolder);
 
   function checkErrors() {
     setErrors([]);
 
     if (!title.trim()) {
-      setErrors((prev) => [...prev, "Folder name is required"]);
+      setErrors((prev) => [...prev, "Folder name cannot be empty"]);
     }
 
     if (title.trim().length > 50) {
@@ -39,9 +44,10 @@ export const FolderCreateDialog: FC<FolderCreateDialogProps> = ({
   }
 
   function save() {
+    if (!folder) return;
     checkErrors();
     if (errors.length === 0) {
-      createFolder(title.trim(), parent?.id);
+      editFolder(folder.id, title.trim());
       close();
     }
   }
@@ -52,14 +58,11 @@ export const FolderCreateDialog: FC<FolderCreateDialogProps> = ({
     onClose();
   }
 
-  const dialogTitle = parent
-    ? `Create Folder in ${parent.title}`
-    : "Create Folder";
-
   return (
     <Dialog open={open}>
-      <DialogHeader title={dialogTitle} onClose={onClose} />
-      <DialogContent className="form">
+      <DialogHeader title="Edit Folder" showCloseButton onClose={onClose} />
+
+      <DialogContent>
         <FormErrors errors={errors} />
         <div className="form_input">
           <label htmlFor="folder-name">Folder Name:</label>
@@ -67,11 +70,14 @@ export const FolderCreateDialog: FC<FolderCreateDialogProps> = ({
             type="text"
             id="folder-name"
             value={title}
+            placeholder="My Folder"
+            required
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Documentation"
+            onBlur={checkErrors}
           />
         </div>
       </DialogContent>
+
       <DialogFooter>
         <DialogActionButton type="cancel" onClick={close}>
           Cancel

@@ -20,6 +20,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        gap: vars.$gap;
 
         padding: 0.5rem 1rem;
 
@@ -87,7 +88,7 @@ ul.bookmark_list {
         flex-direction: column;
         user-select: none;
 
-        & .bookmark_title {
+        & .bookmark_line {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -96,6 +97,23 @@ ul.bookmark_list {
             gap: math.div(vars.$gap, 2);
             border-radius: math.div(vars.$corner, 2);
 
+            & .title {
+                gap: math.div(vars.$gap, 3);
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            & .hierarchy {
+                max-width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: vars.$mocha_subtext0;
+                font-size: 0.8rem;
+            }
+
             &:hover {
                 background-color: color.scale(
                     map.get(vars.$mocha_colors, "mauve"),
@@ -103,13 +121,21 @@ ul.bookmark_list {
                 );
                 color: map.get(vars.$mocha_colors, "mauve");
 
-                & .bookmark_actions {
-                    display: flex;
+                & .actions {
+                    visibility: visible;
+                }
+
+                & .hierarchy {
+                    color: color.scale(
+                        map.get(vars.$mocha_colors, "mauve"),
+                        /* $lightness: -10%, */ $saturation: -50%
+                    );
                 }
             }
 
-            & .bookmark_actions {
-                display: none;
+            & .actions {
+                visibility: hidden;
+                display: flex;
                 flex-direction: row;
                 align-items: center;
                 gap: math.div(vars.$gap, 4);

@@ -11,16 +11,15 @@ const SearchBar = () => {
 
   // focus when "/" is pressed
   const handleDocumentKeyDown = (event: KeyboardEvent) => {
-    if (event.key == "/") {
+    if ((event.ctrlKey || event.metaKey) && event.code === "KeyK") {
       event.preventDefault();
       searchInput.current?.focus();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("keypress", handleDocumentKeyDown);
-    return () =>
-      document.removeEventListener("keypress", handleDocumentKeyDown);
+    window.addEventListener("keydown", handleDocumentKeyDown);
+    return () => window.removeEventListener("keydown", handleDocumentKeyDown);
   }, []);
 
   // focus when first rendered

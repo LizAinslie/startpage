@@ -7,7 +7,9 @@ html {
     font-family: vars.$body_font;
     height: 100vh;
     margin: 0;
+    padding: 0;
     color: vars.$mocha_text;
+    overflow: hidden;
 }
 
 body {

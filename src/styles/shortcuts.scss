@@ -23,8 +23,8 @@
         cursor: pointer;
 
         & svg {
-            width: 3rem;
-            height: 3rem;
+            width: 50%;
+            height: 50%;
         }
 
         @each $name, $colors in vars.$brand_colors {

@@ -8,6 +8,7 @@ My new tab page, featuring a clean and minimalistic design with [Catppuccin](htt
 - [x] Add & remove bookmarks
 - [x] Organize bookmarks in folders
 - [x] Search bookmarks
+- [ ] Import / export bookmarks
 - [ ] Move bookmarks between folders
 - [ ] Tooltips for:
   - [ ] Buttons (to clarify actions)
@@ -33,6 +34,7 @@ My new tab page, featuring a clean and minimalistic design with [Catppuccin](htt
 ![screenshot](https://i-have-a.degradationk.ink/Lizzy68d239e8jRWRHYEkp84G.png)
 ![screenshot](https://i-have-a.degradationk.ink/Lizzy68d23a171ochIzYsHwmD.png)
 ![screenshot](https://i-have-a.degradationk.ink/Lizzy68d23a28FgcReIXlkj03.png)
+![screenshot](https://i-have-a.degradationk.ink/Lizzy68d4e4624c9hAgyyf4qd.png)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

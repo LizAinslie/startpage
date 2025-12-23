@@ -14,8 +14,6 @@ import {
   faFolderOpen,
   faLink,
   faPlus,
-  faPencil,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CommonBookmarkActions } from "./CommonBookmarkActions";
 
@@ -114,7 +112,6 @@ export const UrlBookmark: FC<UrlBookmarkProps> = ({
   return (
     <a
       href={bookmark.url}
-      target="_blank"
       rel="noopener noreferrer"
       className="bookmark_line"
     >

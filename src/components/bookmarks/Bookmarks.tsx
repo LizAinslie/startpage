@@ -9,6 +9,7 @@ import { BookmarkCreateDialog } from "./dialogs/BookmarkCreateDialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
+  faFileExport,
   faFolder,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +23,7 @@ import { BookmarkDeleteDialog } from "./dialogs/BookmarkDeleteDialog";
 import { BookmarkEditDialog } from "./dialogs/BookmarkEditDialog";
 import { FolderEditDialog } from "./dialogs/FolderEditDialog";
 import { BookmarkSearchResults } from "./search/BookmarkSearchResults";
+import { ExportBookmarksDialog } from "./dialogs/ExportBookmarksDialog";
 
 const Bookmarks: FC = () => {
   const bookmarks = useBookmarksStore((store) => store.bookmarks);
@@ -115,6 +117,16 @@ const Bookmarks: FC = () => {
     setFolderEditDialogFolder(undefined);
   }
 
+  const [exportBookmarksDialogOpen, setExportBookmarksDialogOpen] = useState(false);
+
+  function openExportBookmarksDialog() {
+    setExportBookmarksDialogOpen(true);
+  }
+
+  function closeExportBookmarksDialog() {
+    setExportBookmarksDialogOpen(false);
+  }
+
   return (
     <div className="bookmarks">
       <div className="header">
@@ -162,6 +174,12 @@ const Bookmarks: FC = () => {
             mask={faFolder}
           />
         </button>
+
+        <button onClick={() => openExportBookmarksDialog()}>
+          <FontAwesomeIcon
+            icon={faFileExport}
+          />
+        </button>
       </div>
 
       <BookmarkCreateDialog
@@ -192,6 +210,12 @@ const Bookmarks: FC = () => {
         open={folderEditDialogOpen}
         onClose={closeFolderEditDialog}
         folder={folderEditDialogFolder}
+      />
+
+      <ExportBookmarksDialog
+        open={exportBookmarksDialogOpen}
+        onClose={closeExportBookmarksDialog}
+        bookmarks={bookmarks}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 @use "vars";
 @use "sass:color";
 @use "sass:map";
+@use "sass:math";
 
 .dialog_container {
     position: absolute;
@@ -81,7 +82,7 @@
             & .heading {
                 display: flex;
                 align-items: center;
-                gap: vars.$gap / 2;
+                gap: math.div(vars.$gap, 2);
                 font-weight: 500;
                 font-size: 1.1rem;
                 font-family: vars.$display_font;
@@ -90,7 +91,7 @@
             &.error {
                 display: flex;
                 flex-direction: column;
-                gap: vars.$gap / 2;
+                gap: math.div(vars.$gap, 2);
                 color: map.get(vars.$mocha_colors, "red");
                 padding: 0.5rem 1rem;
 
@@ -119,7 +120,7 @@
             gap: vars.$gap;
             padding: 0.5rem 1rem;
 
-            & button {
+            /* & button {
                 padding: 0.25rem 0.5rem;
                 border-radius: vars.$corner;
                 cursor: pointer;
@@ -149,7 +150,7 @@
                         );
                     }
                 }
-            }
+            } */
         }
     }
 }

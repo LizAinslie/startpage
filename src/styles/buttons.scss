@@ -1,0 +1,80 @@
+@use "sass:map";
+@use "sass:color";
+@use "sass:math";
+@use "vars";
+
+@mixin button_base {
+    display: flex;
+    flex-direction: row;
+    border-radius: vars.$corner;
+    align-items: center;
+    justify-content: center;
+    gap: math.div(vars.$gap, 2);
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: background-color color 0.25s ease-in-out;
+}
+
+.buttonBar {
+    display: flex;
+    flex-direction: row;
+
+    &.full {
+        width: 100%;
+    }
+
+    & > .button {
+        // fill parent width evenly
+        flex: 1;
+
+        &:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}
+
+.button {
+    @include button_base;
+
+    padding: 0.25rem 0.5rem;
+
+    &.small {
+        padding: 0.125rem 0.25rem;
+        border-radius: math.div(vars.$corner, 2);
+        font-size: .8rem;
+    }
+
+    @each $name, $value in vars.$mocha_colors {
+        &.solid-#{$name} {
+            background-color: $value;
+            color: vars.$mocha_mantle;
+
+            &:hover {
+                background-color: color.scale(
+                    $value,
+                    $lightness: -10%
+                );
+            }
+        }
+
+        &.outline-#{$name} {
+            border: 1px solid $value;
+            color: $value;
+
+            &:hover {
+                background-color: color.scale(
+                    $value,
+                    $lightness: -10%
+                );
+                color: vars.$mocha_mantle;
+            }
+        }
+    }
+}

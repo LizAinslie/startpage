@@ -13,8 +13,6 @@ import { useBookmarksStore } from "../../../store/bookmarks";
 import { isUrl } from "../../../util/url";
 import { FormErrors } from "../../form/FormErrors";
 import type { BookmarkItemFolder } from "../../../types/bookmarks";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
 export type BookmarkCreateDialogProps = DialogPropsBase & {
   onClose: () => void;
@@ -78,7 +76,7 @@ export const BookmarkCreateDialog: FC<BookmarkCreateDialogProps> = ({
     <Dialog open={open}>
       <DialogHeader title={dialogTitle} onClose={onClose} />
       {errors.length > 0 && (
-        <DialogError heading="Form errors:">
+        <DialogError heading="Errors:">
           <FormErrors errors={errors} />
         </DialogError>
       )}

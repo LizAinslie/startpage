@@ -11,6 +11,11 @@ export type DialogActionButtonProps = PropsWithChildren<{
   onClick: () => void;
 }>;
 
+const CLASSES: Record<DialogActionButtonType, string> = {
+  [DialogActionButtonType.CANCEL]: "solid-red",
+  [DialogActionButtonType.CONFIRM]: "solid-green",
+};
+
 export const DialogActionButton: FC<DialogActionButtonProps> = ({
   type,
   onClick,
@@ -18,7 +23,7 @@ export const DialogActionButton: FC<DialogActionButtonProps> = ({
   children,
 }) => {
   return (
-    <button className={`${type}`} onClick={onClick} disabled={disabled}>
+    <button className={`button ${CLASSES[type]}`} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );

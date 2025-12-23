@@ -64,7 +64,6 @@ const Shortcuts: FC = () => {
           key={name}
           href={url}
           rel="noopener noreferrer"
-          target="_blank"
           className={`shortcut ${name}`}
         >
           <FontAwesomeIcon icon={icon} />

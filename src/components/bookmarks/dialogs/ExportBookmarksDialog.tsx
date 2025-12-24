@@ -21,6 +21,7 @@ export const ExportBookmarksDialog: FC<ExportBookmarksDialogProps> = ({
   open,
   onClose,
   bookmarks,
+  width = "70%"
 }) => {
   const [exportList, setExportList] = useState<ExportableBookmarkItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +78,7 @@ export const ExportBookmarksDialog: FC<ExportBookmarksDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} width="70%">
+    <Dialog open={open} width={width}>
       <DialogHeader title="Export Bookmarks" onClose={close} />
       {error && (
         <DialogError heading="Error">

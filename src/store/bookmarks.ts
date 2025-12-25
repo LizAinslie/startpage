@@ -19,6 +19,7 @@ type BookmarksStore = {
   deleteBookmark: (bookmarkId: string) => void;
   editBookmark: (bookmarkId: string, newTitle: string, newUrl: string) => void;
   editFolder: (folderId: string, newTitle: string) => void;
+  importBookmarks: (bookmarks: BookmarkItem[]) => void;
 };
 
 function walkAndFlattenBookmarks(
@@ -212,6 +213,64 @@ function walkAndGenerateUuid(bookmarks: BookmarkItem[]): string {
   return newId;
 }
 
+function collectAllIds(bookmarks: BookmarkItem[], out = new Set<string>()) {
+  for (const bookmark of bookmarks) {
+    out.add(bookmark.id);
+    if (bookmark.type === BookmarkType.FOLDER) {
+      collectAllIds(bookmark.children, out);
+    }
+  }
+  return out;
+}
+
+function generateIdRemap(
+  bookmarks: BookmarkItem[],
+  taken: Set<string>,
+  remap = new Map<string, string>(),
+): Map<string, string> {
+  for (const bookmark of bookmarks) {
+    if (taken.has(bookmark.id)) {
+      let newId = crypto.randomUUID();
+      while (taken.has(newId)) {
+        newId = crypto.randomUUID();
+      }
+      remap.set(bookmark.id, newId);
+      taken.add(newId);
+    } else {
+      taken.add(bookmark.id);
+    }
+
+    if (bookmark.type === BookmarkType.FOLDER) {
+      generateIdRemap(bookmark.children, taken, remap);
+    }
+  }
+
+  return remap;
+}
+
+function cloneWithRemappedIds(
+  bookmarks: BookmarkItem[],
+  remap: Map<string, string>,
+): BookmarkItem[] {
+  return bookmarks.map((bookmark) => {
+    const id = remap.get(bookmark.id) ?? bookmark.id;
+
+    if (bookmark.type === BookmarkType.URL) {
+      return {
+        ...bookmark,
+        id,
+      };
+    }
+
+    return {
+      ...bookmark,
+      id,
+      children: cloneWithRemappedIds(bookmark.children, remap),
+    };
+  });
+}
+
+
 export const useBookmarksStore = create<BookmarksStore>()(
   computed(
     persist(
@@ -264,6 +323,17 @@ export const useBookmarksStore = create<BookmarksStore>()(
         deleteBookmark: (id) => {
           set({
             bookmarks: walkAndDeleteBookmark(get().bookmarks, id),
+          });
+        },
+        importBookmarks: (incoming) => {
+          const existing = get().bookmarks;
+
+          const takenIds = collectAllIds(existing);
+          const remap = generateIdRemap(incoming, takenIds);
+          const imported = cloneWithRemappedIds(incoming, remap);
+
+          set({
+            bookmarks: [...existing, ...imported],
           });
         },
       }),

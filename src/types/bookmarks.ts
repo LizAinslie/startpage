@@ -1,55 +1,121 @@
+import z from "zod";
+
 export enum BookmarkType {
   URL = "url",
   FOLDER = "folder",
 }
 
-export type BookmarkItemBase = {
+export interface BookmarkItemBase {
   id: string;
   title: string;
   type: BookmarkType;
-};
+}
 
-export type BookmarkItemUrl = BookmarkItemBase & {
+export interface BookmarkItemUrl extends BookmarkItemBase {
   type: BookmarkType.URL;
   url: string;
-};
+}
 
-export type BookmarkItemFolder = BookmarkItemBase & {
+export interface BookmarkItemFolder extends BookmarkItemBase {
   type: BookmarkType.FOLDER;
   children: BookmarkItem[];
-};
+}
 
-export type BookmarkItem = BookmarkItemUrl | BookmarkItemFolder;
+export type BookmarkItem =
+  | BookmarkItemUrl
+  | BookmarkItemFolder;
 
-export type BookmarkSearchResultItem = {
+export const BookmarkItemBaseSchema = z.object({
+  id: z.uuid("v4"),
+  title: z.string().min(1).max(128),
+  type: z.enum(BookmarkType),
+});
+
+export const BookmarkItemUrlSchema =
+  BookmarkItemBaseSchema.extend({
+    type: z.literal(BookmarkType.URL),
+    url: z.httpUrl(),
+  });
+
+export const BookmarkItemFolderSchema =
+  BookmarkItemBaseSchema.extend({
+    type: z.literal(BookmarkType.FOLDER),
+    children: z.array(z.lazy(() => BookmarkItemSchema)),
+  });
+
+export const BookmarkItemSchema: z.ZodType<BookmarkItem> =
+  z.lazy(() =>
+    z.discriminatedUnion("type", [
+      BookmarkItemUrlSchema,
+      BookmarkItemFolderSchema,
+    ])
+  );
+
+
+export interface BookmarkSearchResultItem {
   bookmark: BookmarkItemUrl;
   hierarchy: string[];
-};
+}
 
-export const enum BookmarkExportSelection {
+export const BookmarkSearchResultItemSchema = z.object({
+  bookmark: BookmarkItemUrlSchema,
+  hierarchy: z.array(z.string()),
+});
+
+export enum BookmarkExportSelection {
   DONT_EXPORT = "dont_export",
   PARTIAL = "partial",
   EXPORT = "export",
 }
 
-export type ExportableBookmarkItemBase = BookmarkItemBase & {
+export interface ExportableBookmarkItemBase extends BookmarkItemBase {
   export: BookmarkExportSelection;
-};
+}
 
-export type ExportableFolderBookmarkItem = ExportableBookmarkItemBase & {
+export interface ExportableFolderBookmarkItem extends ExportableBookmarkItemBase {
   type: BookmarkType.FOLDER;
   children: ExportableBookmarkItem[];
-};
+}
 
-export type ExportableUrlBookmarkItem = BookmarkItemUrl & ExportableBookmarkItemBase;
+export interface ExportableUrlBookmarkItem extends ExportableBookmarkItemBase {
+  type: BookmarkType.URL;
+  url: string;
+}
 
-export type ExportableBookmarkItem = ExportableFolderBookmarkItem | ExportableUrlBookmarkItem;
+export type ExportableBookmarkItem =
+  | ExportableFolderBookmarkItem
+  | ExportableUrlBookmarkItem;
+
+export const ExportableBookmarkItemBaseSchema =
+  BookmarkItemBaseSchema.extend({
+    export: z.enum(BookmarkExportSelection),
+  });
+
+export const ExportableFolderBookmarkItemSchema =
+  ExportableBookmarkItemBaseSchema.extend({
+    type: z.literal(BookmarkType.FOLDER),
+    children: z.array(z.lazy(() => ExportableBookmarkItemSchema)),
+  });
+
+export const ExportableUrlBookmarkItemSchema =
+  ExportableBookmarkItemBaseSchema.extend({
+    type: z.literal(BookmarkType.URL),
+    url: z.httpUrl(),
+  });
+
+export const ExportableBookmarkItemSchema: z.ZodType<ExportableBookmarkItem> =
+  z.lazy(() =>
+    z.discriminatedUnion("type", [
+      ExportableFolderBookmarkItemSchema,
+      ExportableUrlBookmarkItemSchema,
+    ])
+  );
 
 export function makeExportable(bookmark: BookmarkItem): ExportableBookmarkItem {
-  if (bookmark.type === "folder") {
+  if (bookmark.type === BookmarkType.FOLDER) {
     return {
       ...bookmark,
-      children: bookmark.children.map(makeExportable),
+      children: (bookmark as BookmarkItemFolder).children.map(makeExportable),
       export: BookmarkExportSelection.DONT_EXPORT,
     };
   }

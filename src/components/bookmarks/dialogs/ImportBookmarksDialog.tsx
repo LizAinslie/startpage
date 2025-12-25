@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FC } from "react";
 import z from "zod";
+import clsx from "clsx";
 import { Dialog, DialogActionButton, DialogContent, DialogError, DialogFooter, DialogHeader, type DialogPropsBase } from "../../dialog";
 import { BookmarkExportSelection, BookmarkItemSchema, filterExports, makeExportable, walkAndSetAllChildrenToSelection, walkAndUpdateBookmarkExportSelection, type BookmarkItem, type ExportableBookmarkItem } from "../../../types/bookmarks";
 import { useDropzone } from "react-dropzone";
@@ -57,7 +58,14 @@ export const ImportBookmarksDialog: FC<ImportBookmarksDialogProps> = ({
     };
     reader.readAsText(file);
   }, [])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const {getRootProps, getInputProps, isDragActive, isFocused, isFileDialogActive} = useDropzone({
+    onDrop,
+    accept: {
+      "application/json": [".json"],
+    },
+    maxFiles: 1,
+    multiple: false,
+  });
 
   const handleBookmarkImportSelectionChange = (id: string, state: BookmarkExportSelection) => {
     setImportList(prev => walkAndUpdateBookmarkExportSelection(prev, id, state));
@@ -106,12 +114,17 @@ export const ImportBookmarksDialog: FC<ImportBookmarksDialogProps> = ({
       )}
       {page === ImportDialogPage.UPLOAD && (
         <DialogContent>
-          <div {...getRootProps()}>
+          <div {...getRootProps({
+            className: clsx('dropzone', { 'highlight': isFocused || isDragActive || isFileDialogActive }),
+          })}>
             <input {...getInputProps()} />
             {isDragActive ? (
               <p>Drop the file here ...</p>
             ) : (
-              <p>Drag 'n' drop a file here, or click to select a file</p>
+              <>
+                <p>Drag 'n' drop a file here, or click to select a file</p>
+                <p className="subtext">Only .json files are supported</p>
+              </>
             )}
           </div>
         </DialogContent>

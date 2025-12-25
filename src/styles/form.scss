@@ -67,3 +67,41 @@ input {
         @include input_focus;
     }
 }
+
+.dropzone {
+    padding: 1.25rem;
+    background-color: transparent;
+    border: 1px solid vars.$mocha_surface0;
+    border-radius: vars.$corner;
+    color: vars.$mocha_text;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    outline: none;
+    gap: 1rem;
+
+
+    transition:
+        background-color 0.25s;
+
+    & p {
+        margin: 0;
+        text-align: center;
+
+        &.subtext {
+            font-size: 0.85rem;
+            color: vars.$mocha_subtext0;
+        }
+    }
+
+    &.highlight {
+        @include input_focus;
+
+        background-color: color.scale($color: map.get(vars.$mocha_colors, "mauve"), $alpha: -70%);
+
+        & p.subtext {
+            color: vars.$mocha_subtext1;
+        }
+    }
+}
